@@ -1,0 +1,34 @@
+sensors:
+  logical_camera_station1:
+    type: logical_camera
+    pose:
+      xyz: [-5.503480, 3.08904, 1.868509]
+      rpy: [1.570797, 1.570792, 1.570796]
+  logical_camera_station2:
+    type: logical_camera
+    pose:
+      xyz: [-10.590, 3.08904, 1.868509]
+      rpy: [0.5*pi, 0.5*pi, 0.5*pi]
+  logical_camera_station3:
+    type: logical_camera
+    pose:
+      xyz: [-5.503480, -3.08904, 1.868509]
+      rpy: [0.5*pi, 0.5*pi, 0.5*pi]
+  logical_camera_station4:
+    type: logical_camera
+    pose:
+      xyz: [-10.590, -3.08904, 1.868509]
+      rpy: [0.5*pi, 0.5*pi, 0.5*pi]
+  logical_camera_bin1_bin2:
+    type: logical_camera
+    pose:
+      xyz: [-2.27, 3.08904, 1.868509]
+      rpy: [0.5*pi, 0.5*pi, 0.5*pi]
+  logical_camera_bin3_bin4:
+    type: logical_camera
+    pose:
+      xyz: [-2.27, -3.08904, 1.868509]
+      rpy: [0.5*pi, 0.5*pi, 0.5*pi]
+
+robot_camera:
+  enable: false

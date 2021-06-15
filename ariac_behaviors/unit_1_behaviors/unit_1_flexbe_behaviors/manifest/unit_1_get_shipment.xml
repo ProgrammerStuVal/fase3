@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="unit_1_get_shipment">
+
+	<executable package_path="unit_1_flexbe_behaviors.unit_1_get_shipment_sm" class="unit_1_get_shipmentSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Mon Jun 14 2021</date>
+	<description>
+		cycles through  shipments
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

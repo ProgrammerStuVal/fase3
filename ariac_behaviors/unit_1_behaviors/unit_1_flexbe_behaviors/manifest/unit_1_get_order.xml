@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="unit_1_get_order">
+
+	<executable package_path="unit_1_flexbe_behaviors.unit_1_get_order_sm" class="unit_1_get_orderSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Mon Jun 14 2021</date>
+	<description>
+		Base program for unit 1
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="unit_1_get_kitting_shipment" />
+
+	<!-- Available Parameters -->
+
+</behavior>

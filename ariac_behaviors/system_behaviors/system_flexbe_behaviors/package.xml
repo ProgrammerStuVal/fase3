@@ -1,0 +1,20 @@
+<package>
+  <name>system_flexbe_behaviors</name>
+  <version>1.0.0</version>
+  <description>
+     system_flexbe_behaviors references all implemented behaviors.
+  </description>
+  <maintainer email="todo@todo.com">TODO</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>unit_1_behavior</run_depend>
+  <run_depend>unit_2_behavior</run_depend>
+    
+  <export>
+    <flexbe_behaviors />
+  </export>
+
+</package>

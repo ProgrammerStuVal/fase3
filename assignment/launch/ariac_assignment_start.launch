@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Argument to the launch file.-->
+	<arg name="order_config" default="assignment_order.yaml"/>
+	<arg name="sensor_config" default="assignment_sensor_config.yaml"/>
+
+	<arg name="verbose" default="false" />
+	<arg unless="$(arg verbose)" name="verbose_args" value="" />
+	<arg     if="$(arg verbose)" name="verbose_args" value="--verbose" />
+
+	<arg name="state_logging" default="false" />
+	<arg unless="$(arg state_logging)" name="state_logging_args" value="" />
+	<arg     if="$(arg state_logging)" name="state_logging_args" value="--state-logging=true" />
+
+	<arg name="no_gui" default="false" />
+	<arg unless="$(arg no_gui)" name="gui_args" value="" />
+	<arg     if="$(arg no_gui)" name="gui_args" value="--no-gui" />
+
+	<arg name="fill_uitwerking_shipment" default="false" />
+	<arg unless="$(arg fill_uitwerking_shipment)" name="fill_uitwerking_shipment_args" value="" />
+	<arg     if="$(arg fill_uitwerking_shipment)" name="fill_uitwerking_shipment_args" value="--fill-uitwerking-shipment" />
+
+	<arg name="load_moveit" default="true" />
+	<arg unless="$(arg load_moveit)" name="load_moveit_args" value="" />
+	<arg if="$(arg load_moveit)" name="load_moveit_args" value="--load-moveit" />
+
+	<arg name="load_gantry_moveit" default="false" />
+	<arg unless="$(arg load_gantry_moveit)" name="load_gantry_moveit_args" value="" />
+	<arg if="$(arg load_gantry_moveit)" name="load_gantry_moveit_args" value="--load-gantry-moveit" />
+
+	<arg name="load_kitting_moveit" default="false" />
+	<arg unless="$(arg load_kitting_moveit)" name="load_kitting_moveit_args" value="" />
+	<arg if="$(arg load_kitting_moveit)" name="load_kitting_moveit_args" value="--load-kitting-moveit" />
+
+	<node name="ariac_sim" pkg="nist_gear" type="gear.py"
+	args="--development-mode
+	  $(arg verbose_args)
+	  $(arg state_logging_args)
+	  $(arg gui_args)
+	  $(arg load_moveit_args)
+	  $(arg load_gantry_moveit_args)
+	  $(arg load_kitting_moveit_args)
+	  $(arg fill_uitwerking_shipment_args)
+		  -f $(find assignment)/config/orders/$(arg order_config)
+		  $(find assignment)/config/sensors/$(arg sensor_config)
+          " required="true" output="screen" />
+
+
+	<param name="ariac_tables_unit1" textfile="$(find assignment)/config/ariac_unit1_tables.tbl" />
+	<param name="ariac_tables_unit2" textfile="$(find assignment)/config/ariac_unit2_tables.tbl" />
+
+
+
+</launch>
+
+

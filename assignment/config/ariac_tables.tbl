@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<tables>
+    <table name = "bin_configuration">
+	    <bin name="bin1">
+		    <robot_config value="xxxx" />
+		    <camera_topic value="yyyy" />
+		    <camera_frame value="zzzz" />
+	    </bin>
+	    <bin name="bin4">
+		    <robot_config value="bin4PreGrasp" />
+		    <camera_topic value="/ariac/logical_camera_1" />
+		    <camera_frame value="logical_camera_1_frame" />
+	    </bin>
+    </table>
+    <table name = "andere tabel">
+    </table>
+</tables>

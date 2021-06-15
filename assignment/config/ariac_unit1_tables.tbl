@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<tables>
+    <table name = "unit1_table">
+       <bin name="bin1">
+		    <robot_config value="kitting_bin_group_a" />
+		    <camera_topic value="/ariac/logical_camera_bin1_bin2" />
+		    <camera_frame value="logical_camera_bin1_bin2_frame" />
+       </bin>
+       <bin name="bin2">
+		    <robot_config value="kitting_bin_group_a" />
+		    <camera_topic value="/ariac/logical_camera_bin1_bin2" />
+		    <camera_frame value="logical_camera_bin1_bin2_frame" />
+       </bin>
+       <bin name="bin3">
+		    <robot_config value="kitting_bin_group_b" />
+		    <camera_topic value="/ariac/logical_camera_bin3_bin4" />
+		    <camera_frame value="logical_camera_bin3_bin4_frame" />
+       </bin>
+       <bin name="bin4">
+		    <robot_config value="kitting_bin_group_b" />
+		    <camera_topic value="/ariac/logical_camera_bin3_bin4" />
+		    <camera_frame value="logical_camera_bin3_bin4_frame" />
+       </bin>
+    </table>
+    <table name = "andere_tabel_voor_unit1">
+    </table>
+</tables>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="unit_1_get_products">
+
+	<executable package_path="unit_1_flexbe_behaviors.unit_1_get_products_sm" class="unit_1_get_productsSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Tue Jun 15 2021</date>
+	<description>
+		program for getting the products
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

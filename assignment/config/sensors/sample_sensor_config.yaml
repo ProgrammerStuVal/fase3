@@ -1,0 +1,11 @@
+sensors:
+
+  logical_camera_station1:
+    type: logical_camera
+    pose:
+      xyz: [-5.503480, 3.08904, 1.868509]
+      rpy: [1.570797, 1.570792, 1.570796]
+
+robot_camera:
+  enable: false
+
