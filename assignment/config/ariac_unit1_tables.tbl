@@ -32,6 +32,7 @@
 	<part_type name="assembly_battery_blue">
 		<part_height value="0.044" />
 	</part_type>
+
 	<part_type name="assembly_pump_red">
 		<part_height value="0.076" />
 	</part_type>
@@ -41,19 +42,21 @@
 	<part_type name="assembly_pump_blue">
 		<part_height value="0.076" />
 	</part_type>
+
 	<part_type name="assembly_sensor_red">
-		<part_height value="0.058" />
-	</part_type>
-	<part_type name="assembly_sensor_green">
-		<part_height value="0.058" />
-	</part_type>
-	<part_type name="assembly_sensor_blue">
-		<part_height value="0.058" />
-	</part_type>
-	<part_type name="assembly_regulator_blue">
 		<part_height value="0.060" />
 	</part_type>
-	<part_type name="assembly_regulator_blue">
+	<part_type name="assembly_sensor_green">
+		<part_height value="0.060" />
+	</part_type>
+	<part_type name="assembly_sensor_blue">
+		<part_height value="0.060" />
+	</part_type>
+
+	<part_type name="assembly_regulator_red">
+		<part_height value="0.060" />
+	</part_type>
+	<part_type name="assembly_regulator_green">
 		<part_height value="0.060" />
 	</part_type>
 	<part_type name="assembly_regulator_blue">

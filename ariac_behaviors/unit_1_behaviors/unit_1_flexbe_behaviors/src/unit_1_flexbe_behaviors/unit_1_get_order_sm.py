@@ -13,6 +13,8 @@ from ariac_flexbe_states.start_assignment_state import StartAssignment
 from ariac_logistics_flexbe_states.get_kitting_shipment_from_order_state import GetKittingShipmentFromOrderState
 from ariac_logistics_flexbe_states.get_order_state import GetOrderState
 from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
+from ariac_support_flexbe_states.add_numeric_state import AddNumericState
+from ariac_support_flexbe_states.equal_state import EqualState
 from unit_1_flexbe_behaviors.put_product_on_avg_sm import putproductonavgSM
 from unit_1_flexbe_behaviors.unit_1_get_products_from_bin_sm import unit_1_get_products_from_binSM
 # Additional imports can be added inside the following tags
@@ -57,6 +59,7 @@ class unit_1_get_orderSM(Behavior):
 		_state_machine.userdata.number_of_shipments = 0
 		_state_machine.userdata.current_kitting = 0
 		_state_machine.userdata.current_kitting_product = 0
+		_state_machine.userdata.one_value = 1
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -92,21 +95,35 @@ class unit_1_get_orderSM(Behavior):
 										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'products': 'kitting_products', 'index': 'current_kitting_product', 'type': 'product_type', 'pose': 'product_pose'})
 
-			# x:1418 y:41
+			# x:1310 y:329
+			OperatableStateMachine.add('last kitting shipment if',
+										EqualState(),
+										transitions={'true': 'end', 'false': 'shipment iterator'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'current_kitting', 'value_b': 'kitting_shipments'})
+
+			# x:1206 y:131
 			OperatableStateMachine.add('put product on avg',
 										self.use_behavior(putproductonavgSM, 'put product on avg'),
-										transitions={'finished': 'end', 'failed': 'failed'},
-										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
+										transitions={'finished': 'last kitting shipment if', 'failed': 'failed', 'Next_product': 'get parts'},
+										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit, 'Next_product': Autonomy.Inherit},
 										remapping={'agv_id': 'agv_id', 'current_kitting_product': 'current_kitting_product', 'number_of_kitting_products': 'number_of_kitting_products', 'part_height': 'part_height', 'offset': 'product_pose'})
 
-			# x:1150 y:37
+			# x:932 y:349
+			OperatableStateMachine.add('shipment iterator',
+										AddNumericState(),
+										transitions={'done': 'get kitting shipment'},
+										autonomy={'done': Autonomy.Off},
+										remapping={'value_a': 'current_kitting', 'value_b': 'one_value', 'result': 'current_kitting'})
+
+			# x:1183 y:25
 			OperatableStateMachine.add('unit_1_get_products_from_bin',
 										self.use_behavior(unit_1_get_products_from_binSM, 'unit_1_get_products_from_bin'),
 										transitions={'finished': 'put product on avg', 'failed': 'failed'},
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
 										remapping={'kitting_part': 'product_type', 'part_height': 'part_height'})
 
-			# x:1402 y:550
+			# x:1314 y:521
 			OperatableStateMachine.add('end',
 										EndAssignment(),
 										transitions={'continue': 'finished'},

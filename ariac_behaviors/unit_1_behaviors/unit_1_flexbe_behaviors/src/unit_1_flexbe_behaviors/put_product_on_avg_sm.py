@@ -12,9 +12,12 @@ from ariac_flexbe_states.add_offset_to_pose_state import AddOffsetToPoseState
 from ariac_flexbe_states.compute_grasp_ariac_state import ComputeGraspAriacState
 from ariac_flexbe_states.get_object_pose import GetObjectPoseState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
+from ariac_flexbe_states.message_state import MessageState
 from ariac_flexbe_states.moveit_to_joints_dyn_ariac_state import MoveitToJointsDynAriacState
 from ariac_flexbe_states.srdf_state_to_moveit_ariac_state import SrdfStateToMoveitAriac
 from ariac_flexbe_states.vacuum_gripper_control_state import VacuumGripperControlState
+from ariac_support_flexbe_states.add_numeric_state import AddNumericState
+from ariac_support_flexbe_states.equal_state import EqualState
 from flexbe_states.wait_state import WaitState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -50,8 +53,8 @@ class putproductonavgSM(Behavior):
 
 
 	def create(self):
-		# x:1339 y:508, x:746 y:323
-		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['agv_id', 'current_kitting_product', 'number_of_kitting_products', 'part_height', 'offset'])
+		# x:1414 y:635, x:746 y:323, x:1047 y:608
+		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed', 'Next_product'], input_keys=['agv_id', 'current_kitting_product', 'number_of_kitting_products', 'part_height', 'offset'], output_keys=['current_kitting_product'])
 		_state_machine.userdata.agv_id = ''
 		_state_machine.userdata.number_of_kitting_products = 0
 		_state_machine.userdata.current_kitting_product = 0
@@ -76,12 +79,12 @@ class putproductonavgSM(Behavior):
 
 
 		with _state_machine:
-			# x:113 y:59
-			OperatableStateMachine.add('lookup camera topic',
-										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='agv_table', index_title='agv', column_title='agv_tray'),
-										transitions={'found': 'lookup agv pregrasp', 'not_found': 'failed'},
-										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'index_value': 'agv_id', 'column_value': 'agv_frame'})
+			# x:30 y:121
+			OperatableStateMachine.add('agv_id',
+										MessageState(),
+										transitions={'continue': 'lookup camera topic'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'message': 'agv_id'})
 
 			# x:946 y:56
 			OperatableStateMachine.add('add ofset to pose',
@@ -110,12 +113,33 @@ class putproductonavgSM(Behavior):
 										transitions={'continue': 'waiat for part to be dropped', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
+			# x:1005 y:476
+			OperatableStateMachine.add('iterate',
+										AddNumericState(),
+										transitions={'done': 'Next_product'},
+										autonomy={'done': Autonomy.Off},
+										remapping={'value_a': 'current_kitting_product', 'value_b': 'one_value', 'result': 'current_kitting_product'})
+
+			# x:1251 y:467
+			OperatableStateMachine.add('last product if',
+										EqualState(),
+										transitions={'true': 'finished', 'false': 'iterate'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'number_of_kitting_products', 'value_b': 'current_kitting_product'})
+
 			# x:273 y:56
 			OperatableStateMachine.add('lookup agv pregrasp',
 										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='agv_table', index_title='agv', column_title='agv_prepose'),
 										transitions={'found': 'get agv pose', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'agv_id', 'column_value': 'agv_pregrasp'})
+
+			# x:113 y:59
+			OperatableStateMachine.add('lookup camera topic',
+										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='agv_table', index_title='agv', column_title='agv_kit'),
+										transitions={'found': 'lookup agv pregrasp', 'not_found': 'failed'},
+										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'index_value': 'agv_id', 'column_value': 'agv_frame'})
 
 			# x:1270 y:41
 			OperatableStateMachine.add('move to agv',
@@ -134,7 +158,7 @@ class putproductonavgSM(Behavior):
 			# x:1263 y:370
 			OperatableStateMachine.add('waiat for part to be dropped',
 										WaitState(wait_time=1),
-										transitions={'done': 'finished'},
+										transitions={'done': 'last product if'},
 										autonomy={'done': Autonomy.Off})
 
 			# x:756 y:53
