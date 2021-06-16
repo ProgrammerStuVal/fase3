@@ -13,6 +13,7 @@ from ariac_flexbe_states.start_assignment_state import StartAssignment
 from ariac_logistics_flexbe_states.get_kitting_shipment_from_order_state import GetKittingShipmentFromOrderState
 from ariac_logistics_flexbe_states.get_order_state import GetOrderState
 from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
+from unit_1_flexbe_behaviors.put_product_on_avg_sm import putproductonavgSM
 from unit_1_flexbe_behaviors.unit_1_get_products_from_bin_sm import unit_1_get_products_from_binSM
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -37,6 +38,7 @@ class unit_1_get_orderSM(Behavior):
 		# parameters of this behavior
 
 		# references to used behaviors
+		self.add_behavior(putproductonavgSM, 'put product on avg')
 		self.add_behavior(unit_1_get_products_from_binSM, 'unit_1_get_products_from_bin')
 
 		# Additional initialization code can be added inside the following tags
@@ -90,12 +92,19 @@ class unit_1_get_orderSM(Behavior):
 										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'products': 'kitting_products', 'index': 'current_kitting_product', 'type': 'product_type', 'pose': 'product_pose'})
 
+			# x:1418 y:41
+			OperatableStateMachine.add('put product on avg',
+										self.use_behavior(putproductonavgSM, 'put product on avg'),
+										transitions={'finished': 'end', 'failed': 'failed'},
+										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
+										remapping={'agv_id': 'agv_id', 'current_kitting_product': 'current_kitting_product', 'number_of_kitting_products': 'number_of_kitting_products', 'part_height': 'part_height', 'offset': 'product_pose'})
+
 			# x:1150 y:37
 			OperatableStateMachine.add('unit_1_get_products_from_bin',
 										self.use_behavior(unit_1_get_products_from_binSM, 'unit_1_get_products_from_bin'),
-										transitions={'finished': 'end', 'failed': 'failed', 'next_product': 'get parts'},
-										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit, 'next_product': Autonomy.Inherit},
-										remapping={'kitting_part': 'product_type', 'current_kitting_product': 'current_kitting_product', 'total_number_of_kitting_products': 'number_of_kitting_products'})
+										transitions={'finished': 'put product on avg', 'failed': 'failed'},
+										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
+										remapping={'kitting_part': 'product_type', 'part_height': 'part_height'})
 
 			# x:1402 y:550
 			OperatableStateMachine.add('end',

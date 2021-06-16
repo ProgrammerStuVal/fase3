@@ -75,7 +75,7 @@
         <joint name="wrist_2_joint" value="-1.56" />
         <joint name="wrist_3_joint" value="0" />
     </group_state>
-    <group_state name="kitting_agv_1" group="kitting_arm">
+    <group_state name="kitting_agv_4" group="kitting_arm">
         <joint name="elbow_joint" value="1.4232" />
         <joint name="linear_arm_actuator_joint" value="-4.675404" />
         <joint name="shoulder_lift_joint" value="-1.0761" />

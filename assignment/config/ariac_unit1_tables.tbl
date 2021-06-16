@@ -24,40 +24,58 @@
     </table>
     <table name = "part_height_table">
 	<part_type name="assembly_battery_red">
-		<part_height value="0.042" />
+		<part_height value="0.044" />
 	</part_type>
 	<part_type name="assembly_battery_green">
-		<part_height value="0.042" />
+		<part_height value="0.044" />
 	</part_type>
 	<part_type name="assembly_battery_blue">
-		<part_height value="0.042" />
+		<part_height value="0.044" />
 	</part_type>
 	<part_type name="assembly_pump_red">
-		<part_height value="0.074" />
+		<part_height value="0.076" />
 	</part_type>
 	<part_type name="assembly_pump_green">
-		<part_height value="0.074" />
+		<part_height value="0.076" />
 	</part_type>
 	<part_type name="assembly_pump_blue">
-		<part_height value="0.074" />
+		<part_height value="0.076" />
 	</part_type>
 	<part_type name="assembly_sensor_red">
-		<part_height value="0.056" />
+		<part_height value="0.058" />
 	</part_type>
 	<part_type name="assembly_sensor_green">
-		<part_height value="0.056" />
+		<part_height value="0.058" />
 	</part_type>
 	<part_type name="assembly_sensor_blue">
-		<part_height value="0.056" />
-	</part_type>
-	<part_type name="assembly_regulator_blue">
 		<part_height value="0.058" />
 	</part_type>
 	<part_type name="assembly_regulator_blue">
-		<part_height value="0.058" />
+		<part_height value="0.060" />
 	</part_type>
 	<part_type name="assembly_regulator_blue">
-		<part_height value="0.058" />
+		<part_height value="0.060" />
 	</part_type>
+	<part_type name="assembly_regulator_blue">
+		<part_height value="0.060" />
+	</part_type>
+    </table>
+    <table name = "agv_table">
+       <agv name="agv1">
+		    <agv_kit value="kit_tray_1" />
+		    <agv_prepose value="kitting_agv_1" />
+       </agv>
+       <agv name="agv2">
+		    <agv_kit value="kit_tray_2" />
+		    <agv_prepose value="kitting_agv_2" />
+       </agv>
+       <agv name="agv3">
+		    <agv_kit value="kit_tray_3" />
+		    <agv_prepose value="kitting_agv_3" />
+       </agv>
+       <agv name="agv4">
+		    <agv_kit value="kit_tray_4" />
+		    <agv_prepose value="kitting_agv_4" />
+       </agv>
     </table>
 </tables>

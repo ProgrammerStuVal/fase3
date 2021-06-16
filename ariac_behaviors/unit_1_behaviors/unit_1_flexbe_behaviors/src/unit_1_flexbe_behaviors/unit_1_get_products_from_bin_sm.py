@@ -14,8 +14,6 @@ from ariac_flexbe_states.message_state import MessageState
 from ariac_flexbe_states.moveit_to_joints_dyn_ariac_state import MoveitToJointsDynAriacState
 from ariac_flexbe_states.srdf_state_to_moveit_ariac_state import SrdfStateToMoveitAriac
 from ariac_logistics_flexbe_states.get_material_locations import GetMaterialLocationsState
-from ariac_support_flexbe_states.add_numeric_state import AddNumericState
-from ariac_support_flexbe_states.equal_state import EqualState
 from ariac_support_flexbe_states.get_item_from_list_state import GetItemFromListState
 from unit_1_flexbe_behaviors.gripper_correcting_sm import Gripper_correctingSM
 # Additional imports can be added inside the following tags
@@ -55,8 +53,8 @@ class unit_1_get_products_from_binSM(Behavior):
 	def create(self):
 		gripper_service = '/ariac/kitting/arm/gripper/control'
 		gripper_topic = '/ariac/kitting/arm/gripper/state'
-		# x:108 y:212, x:644 y:258, x:271 y:696
-		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed', 'next_product'], input_keys=['kitting_part', 'current_kitting_product', 'total_number_of_kitting_products'], output_keys=['current_kitting_product'])
+		# x:556 y:657, x:644 y:258
+		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['kitting_part'], output_keys=['part_height'])
 		_state_machine.userdata.kitting_part = ''
 		_state_machine.userdata.location_type = ''
 		_state_machine.userdata.material_locations = []
@@ -80,10 +78,7 @@ class unit_1_get_products_from_binSM(Behavior):
 		_state_machine.userdata.gripper_attached = False
 		_state_machine.userdata.true_var = True
 		_state_machine.userdata.kitting_part_pose = []
-		_state_machine.userdata.part_height = 0.0
-		_state_machine.userdata.current_kitting_product = 0
-		_state_machine.userdata.total_number_of_kitting_products = 0
-		_state_machine.userdata.one_value = 1
+		_state_machine.userdata.part_height = ''
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -119,13 +114,6 @@ class unit_1_get_products_from_binSM(Behavior):
 										transitions={'done': 'lookup camera topic', 'invalid_index': 'failed'},
 										autonomy={'done': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'list': 'material_locations', 'index': 'first', 'item': 'bin'})
-
-			# x:249 y:556
-			OperatableStateMachine.add('increment product iterator',
-										AddNumericState(),
-										transitions={'done': 'next_product'},
-										autonomy={'done': Autonomy.Off},
-										remapping={'value_a': 'current_kitting_product', 'value_b': 'one_value', 'result': 'current_kitting_product'})
 
 			# x:749 y:39
 			OperatableStateMachine.add('lookup camera  frame',
@@ -165,16 +153,9 @@ class unit_1_get_products_from_binSM(Behavior):
 			# x:703 y:656
 			OperatableStateMachine.add('move to bin again',
 										MoveitToJointsDynAriacState(),
-										transitions={'reached': 'parts all done if', 'planning_failed': 'failed', 'control_failed': 'failed'},
+										transitions={'reached': 'finished', 'planning_failed': 'failed', 'control_failed': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off},
 										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
-
-			# x:329 y:428
-			OperatableStateMachine.add('parts all done if',
-										EqualState(),
-										transitions={'true': 'finished', 'false': 'increment product iterator'},
-										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-										remapping={'value_a': 'current_kitting_product', 'value_b': 'total_number_of_kitting_products'})
 
 			# x:1176 y:155
 			OperatableStateMachine.add('pre move to bin',

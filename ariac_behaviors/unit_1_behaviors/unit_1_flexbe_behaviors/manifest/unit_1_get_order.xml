@@ -12,6 +12,7 @@
 
 
 	<!-- Contained Behaviors -->
+	<contains name="put product on avg" />
 	<contains name="unit_1_get_products_from_bin" />
 
 	<!-- Available Parameters -->
