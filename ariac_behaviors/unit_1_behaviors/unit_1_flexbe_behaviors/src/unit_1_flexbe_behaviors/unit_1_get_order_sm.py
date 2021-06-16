@@ -9,6 +9,7 @@
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
 from ariac_flexbe_states.end_assignment_state import EndAssignment
+from ariac_flexbe_states.notify_kitting_shipment_ready_state import NotifyKittingShipmentState
 from ariac_flexbe_states.start_assignment_state import StartAssignment
 from ariac_logistics_flexbe_states.get_kitting_shipment_from_order_state import GetKittingShipmentFromOrderState
 from ariac_logistics_flexbe_states.get_order_state import GetOrderState
@@ -105,7 +106,7 @@ class unit_1_get_orderSM(Behavior):
 			# x:1206 y:131
 			OperatableStateMachine.add('put product on avg',
 										self.use_behavior(putproductonavgSM, 'put product on avg'),
-										transitions={'finished': 'last kitting shipment if', 'failed': 'failed', 'Next_product': 'get parts'},
+										transitions={'finished': 'shipment ready', 'failed': 'failed', 'Next_product': 'get parts'},
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit, 'Next_product': Autonomy.Inherit},
 										remapping={'agv_id': 'agv_id', 'current_kitting_product': 'current_kitting_product', 'number_of_kitting_products': 'number_of_kitting_products', 'part_height': 'part_height', 'offset': 'product_pose'})
 
@@ -115,6 +116,13 @@ class unit_1_get_orderSM(Behavior):
 										transitions={'done': 'get kitting shipment'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'current_kitting', 'value_b': 'one_value', 'result': 'current_kitting'})
+
+			# x:1302 y:209
+			OperatableStateMachine.add('shipment ready',
+										NotifyKittingShipmentState(),
+										transitions={'continue': 'last kitting shipment if', 'fail': 'failed', 'service_timeout': 'failed'},
+										autonomy={'continue': Autonomy.Off, 'fail': Autonomy.Off, 'service_timeout': Autonomy.Off},
+										remapping={'agv_id': 'agv_id', 'shipment_type': 'shipment_type', 'assembly_station_name': 'station_id', 'success': 'success', 'message': 'message'})
 
 			# x:1183 y:25
 			OperatableStateMachine.add('unit_1_get_products_from_bin',
