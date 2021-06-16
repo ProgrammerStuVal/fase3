@@ -8,9 +8,7 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
-from ariac_support_flexbe_states.add_numeric_state import AddNumericState
-from ariac_support_flexbe_states.equal_state import EqualState
+from unit_1_flexbe_behaviors.unit_1_get_products_from_bin_sm import unit_1_get_products_from_binSM
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
 
@@ -34,6 +32,7 @@ class unit_1_get_productsSM(Behavior):
 		# parameters of this behavior
 
 		# references to used behaviors
+		self.add_behavior(unit_1_get_products_from_binSM, 'unit_1_get_products_from_bin')
 
 		# Additional initialization code can be added inside the following tags
 		# [MANUAL_INIT]
@@ -45,8 +44,8 @@ class unit_1_get_productsSM(Behavior):
 
 
 	def create(self):
-		# x:607 y:471, x:615 y:295
-		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['kitting_products', 'number_of_kitting_products'])
+		# x:817 y:84, x:615 y:295
+		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['kitting_products', 'number_of_kitting_products', 'product_type', 'product_pose'])
 		_state_machine.userdata.kitting_products = []
 		_state_machine.userdata.current_product = 0
 		_state_machine.userdata.product_type = ''
@@ -61,26 +60,12 @@ class unit_1_get_productsSM(Behavior):
 
 
 		with _state_machine:
-			# x:208 y:48
-			OperatableStateMachine.add('get parts',
-										GetPartFromProductsState(),
-										transitions={'continue': 'increment product iterator', 'invalid_index': 'failed'},
-										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
-										remapping={'products': 'kitting_products', 'index': 'current_product', 'type': 'product_type', 'pose': 'product_pose'})
-
-			# x:839 y:58
-			OperatableStateMachine.add('increment product iterator',
-										AddNumericState(),
-										transitions={'done': 'products done if'},
-										autonomy={'done': Autonomy.Off},
-										remapping={'value_a': 'current_product', 'value_b': 'iterator', 'result': 'current_product'})
-
-			# x:557 y:342
-			OperatableStateMachine.add('products done if',
-										EqualState(),
-										transitions={'true': 'finished', 'false': 'get parts'},
-										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-										remapping={'value_a': 'current_product', 'value_b': 'number_of_kitting_products'})
+			# x:501 y:24
+			OperatableStateMachine.add('unit_1_get_products_from_bin',
+										self.use_behavior(unit_1_get_products_from_binSM, 'unit_1_get_products_from_bin'),
+										transitions={'finished': 'finished', 'failed': 'failed'},
+										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
+										remapping={'kitting_part': 'product_type'})
 
 
 		return _state_machine

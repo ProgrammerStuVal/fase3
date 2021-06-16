@@ -12,7 +12,7 @@
 
 
 	<!-- Contained Behaviors -->
-	<contains name="unit_1_get_kitting_shipment" />
+	<contains name="unit_1_get_products_from_bin" />
 
 	<!-- Available Parameters -->
 

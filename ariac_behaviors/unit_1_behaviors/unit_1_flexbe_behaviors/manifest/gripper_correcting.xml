@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Gripper_correcting">
+
+	<executable package_path="unit_1_flexbe_behaviors.gripper_correcting_sm" class="Gripper_correctingSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Wed Jun 16 2021</date>
+	<description>
+		lowers the robot to correct the  part_height mistake
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

@@ -12,6 +12,7 @@
 
 
 	<!-- Contained Behaviors -->
+	<contains name="Gripper_correcting" />
 
 	<!-- Available Parameters -->
 

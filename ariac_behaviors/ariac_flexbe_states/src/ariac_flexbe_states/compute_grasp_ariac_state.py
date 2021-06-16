@@ -134,7 +134,7 @@ class ComputeGraspAriacState(EventState):
 		self._namespace = userdata.namespace
 		self._tool_link = userdata.tool_link
 
-		self._offset = userdata.offset
+		self._offset = float(userdata.offset)
 		self._rotation = userdata.rotation
 
 		self._srv_name = userdata.namespace + '/compute_ik'

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="put product on avg">
+
+	<executable package_path="unit_1_flexbe_behaviors.put_product_on_avg_sm" class="putproductonavgSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Wed Jun 16 2021</date>
+	<description>
+		puts products down on corresponding agv
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>
