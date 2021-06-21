@@ -24,43 +24,43 @@
     </table>
     <table name = "part_height_table">
 	<part_type name="assembly_battery_red">
-		<part_height value="0.044" />
+		<part_height value="0.055" />
 	</part_type>
 	<part_type name="assembly_battery_green">
-		<part_height value="0.044" />
+		<part_height value="0.055" />
 	</part_type>
 	<part_type name="assembly_battery_blue">
-		<part_height value="0.044" />
+		<part_height value="0.055" />
 	</part_type>
 
 	<part_type name="assembly_pump_red">
-		<part_height value="0.076" />
+		<part_height value="0.083" />
 	</part_type>
 	<part_type name="assembly_pump_green">
-		<part_height value="0.076" />
+		<part_height value="0.083" />
 	</part_type>
 	<part_type name="assembly_pump_blue">
-		<part_height value="0.076" />
+		<part_height value="0.083" />
 	</part_type>
 
 	<part_type name="assembly_sensor_red">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
 	<part_type name="assembly_sensor_green">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
 	<part_type name="assembly_sensor_blue">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
 
 	<part_type name="assembly_regulator_red">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
 	<part_type name="assembly_regulator_green">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
 	<part_type name="assembly_regulator_blue">
-		<part_height value="0.060" />
+		<part_height value="0.065" />
 	</part_type>
     </table>
     <table name = "agv_table">
@@ -80,5 +80,25 @@
 		    <agv_kit value="kit_tray_4" />
 		    <agv_prepose value="kitting_agv_4" />
        </agv>
+    </table>
+    <table name = "assembly_stations">
+       <as name="as1">
+		    <as_camera_topic value="/ariac/logical_camera_station_1" />
+		    <as_camera_frame value="logical_camera_station_1" />
+		    <as_global_pos value="gantry_wp_as1_as3" />
+		    <as_direct_pos value="logical_camera_station_1" />
+       </as>
+       <as name="as2">
+		    <as_camera_topic value="/ariac/logical_camera_station_2" />
+		    <as_camera_frame value="logical_camera_station_2" />
+       </as>
+       <as name="as3">
+		    <as_camera_topic value="/ariac/logical_camera_station_3" />
+		    <as_camera_frame value="logical_camera_station_3" />
+       </as>
+       <asa name="as4">
+		    <as_camera_topic value="/ariac/logical_camera_station_4" />
+		    <as_camera_frame value="logical_camera_station_4" />
+       </as>
     </table>
 </tables>

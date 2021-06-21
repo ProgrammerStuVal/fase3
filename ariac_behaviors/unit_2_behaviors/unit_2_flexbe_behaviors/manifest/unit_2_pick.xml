@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Unit_2_pick">
+
+	<executable package_path="unit_2_flexbe_behaviors.unit_2_pick_sm" class="Unit_2_pickSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Mon Jun 21 2021</date>
+	<description>
+		picks up parts from agv
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

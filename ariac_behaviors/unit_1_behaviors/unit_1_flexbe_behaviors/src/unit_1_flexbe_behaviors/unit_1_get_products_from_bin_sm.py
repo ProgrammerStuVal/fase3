@@ -11,7 +11,6 @@ from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyC
 from ariac_flexbe_states.detect_part_camera_ariac_state import DetectPartCameraAriacState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
 from ariac_flexbe_states.message_state import MessageState
-from ariac_flexbe_states.moveit_to_joints_dyn_ariac_state import MoveitToJointsDynAriacState
 from ariac_flexbe_states.srdf_state_to_moveit_ariac_state import SrdfStateToMoveitAriac
 from ariac_logistics_flexbe_states.get_material_locations import GetMaterialLocationsState
 from ariac_support_flexbe_states.get_item_from_list_state import GetItemFromListState
@@ -143,31 +142,17 @@ class unit_1_get_products_from_binSM(Behavior):
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'bin', 'column_value': 'robot_pregrasp'})
 
-			# x:1161 y:232
-			OperatableStateMachine.add('move to bin',
-										MoveitToJointsDynAriacState(),
-										transitions={'reached': 'what part', 'planning_failed': 'failed', 'control_failed': 'failed'},
-										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off},
-										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
-
-			# x:703 y:656
-			OperatableStateMachine.add('move to bin again',
-										MoveitToJointsDynAriacState(),
-										transitions={'reached': 'finished', 'planning_failed': 'failed', 'control_failed': 'failed'},
-										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off},
-										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
-
 			# x:1176 y:155
 			OperatableStateMachine.add('pre move to bin',
 										SrdfStateToMoveitAriac(),
-										transitions={'reached': 'move to bin', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										transitions={'reached': 'what part', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
 										remapping={'config_name': 'robot_pregrasp', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
 			# x:932 y:645
 			OperatableStateMachine.add('pre move to bin again',
 										SrdfStateToMoveitAriac(),
-										transitions={'reached': 'move to bin again', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										transitions={'reached': 'finished', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
 										remapping={'config_name': 'robot_pregrasp', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Unit_2_Get_order">
+
+	<executable package_path="unit_2_flexbe_behaviors.unit_2_get_order_sm" class="Unit_2_Get_orderSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Mon Jun 21 2021</date>
+	<description>
+		main program unit 2
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="Unit_2_pick" />
+
+	<!-- Available Parameters -->
+
+</behavior>

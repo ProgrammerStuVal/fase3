@@ -86,13 +86,6 @@ class putproductonavgSM(Behavior):
 										autonomy={'continue': Autonomy.Off},
 										remapping={'message': 'agv_id'})
 
-			# x:946 y:56
-			OperatableStateMachine.add('add ofset to pose',
-										AddOffsetToPoseState(),
-										transitions={'continue': 'compute agv drop'},
-										autonomy={'continue': Autonomy.Off},
-										remapping={'input_pose': 'agv_pose', 'offset_pose': 'offset', 'output_pose': 'agv_frame'})
-
 			# x:1120 y:43
 			OperatableStateMachine.add('compute agv drop',
 										ComputeGraspAriacState(joint_names=['elbow_joint', 'linear_arm_actuator_joint', 'shoulder_lift_joint', 'shoulder_pan_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']),
@@ -103,27 +96,27 @@ class putproductonavgSM(Behavior):
 			# x:429 y:55
 			OperatableStateMachine.add('get agv pose',
 										GetObjectPoseState(),
-										transitions={'continue': 'premove to agv pregrasp', 'failed': 'failed'},
+										transitions={'continue': 'move to agv pregrasp', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off},
 										remapping={'ref_frame': 'ref_frame', 'frame': 'agv_frame', 'pose': 'agv_pose'})
 
 			# x:1267 y:218
 			OperatableStateMachine.add('gripper off',
 										VacuumGripperControlState(enable=False, service_name='/ariac/kitting/arm/gripper/control'),
-										transitions={'continue': 'waiat for part to be dropped', 'failed': 'failed'},
+										transitions={'continue': 'wait for part to be dropped', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
-			# x:1005 y:476
+			# x:1271 y:383
 			OperatableStateMachine.add('iterate',
 										AddNumericState(),
-										transitions={'done': 'Next_product'},
+										transitions={'done': 'last product if'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'current_kitting_product', 'value_b': 'one_value', 'result': 'current_kitting_product'})
 
 			# x:1251 y:467
 			OperatableStateMachine.add('last product if',
 										EqualState(),
-										transitions={'true': 'finished', 'false': 'iterate'},
+										transitions={'true': 'finished', 'false': 'Next_product'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'number_of_kitting_products', 'value_b': 'current_kitting_product'})
 
@@ -149,24 +142,24 @@ class putproductonavgSM(Behavior):
 										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
 			# x:573 y:58
-			OperatableStateMachine.add('premove to agv pregrasp',
+			OperatableStateMachine.add('move to agv pregrasp',
 										SrdfStateToMoveitAriac(),
-										transitions={'reached': 'actual move to agv pregrasp', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										transitions={'reached': 'add ofset to pose', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
 										remapping={'config_name': 'agv_pregrasp', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
-			# x:1263 y:370
-			OperatableStateMachine.add('waiat for part to be dropped',
+			# x:1263 y:285
+			OperatableStateMachine.add('wait for part to be dropped',
 										WaitState(wait_time=1),
-										transitions={'done': 'last product if'},
+										transitions={'done': 'iterate'},
 										autonomy={'done': Autonomy.Off})
 
-			# x:756 y:53
-			OperatableStateMachine.add('actual move to agv pregrasp',
-										MoveitToJointsDynAriacState(),
-										transitions={'reached': 'add ofset to pose', 'planning_failed': 'failed', 'control_failed': 'failed'},
-										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off},
-										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
+			# x:803 y:47
+			OperatableStateMachine.add('add ofset to pose',
+										AddOffsetToPoseState(),
+										transitions={'continue': 'compute agv drop'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'input_pose': 'agv_pose', 'offset_pose': 'offset', 'output_pose': 'agv_frame'})
 
 
 		return _state_machine
