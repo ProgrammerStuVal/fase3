@@ -11,10 +11,13 @@ from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyC
 from ariac_flexbe_states.compute_grasp_ariac_state import ComputeGraspAriacState
 from ariac_flexbe_states.detect_part_camera_and_side import DetectPartCameraAndSideAriacState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
+from ariac_flexbe_states.lookup_from_table_special import LookupFromTableSpecialState
+from ariac_flexbe_states.message_state import MessageState
 from ariac_flexbe_states.srdf_state_to_moveit_ariac_state import SrdfStateToMoveitAriac
 from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
 from ariac_support_flexbe_states.equal_state import EqualState
 from ariac_support_flexbe_states.replace_state import ReplaceState
+from unit_2_flexbe_behaviors.unit_2_gripper_correcting_sm import unit_2_Gripper_correctingSM
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
 
@@ -38,6 +41,7 @@ class Unit_2_pickSM(Behavior):
 		# parameters of this behavior
 
 		# references to used behaviors
+		self.add_behavior(unit_2_Gripper_correctingSM, 'unit_2_Gripper_correcting')
 
 		# Additional initialization code can be added inside the following tags
 		# [MANUAL_INIT]
@@ -70,6 +74,10 @@ class Unit_2_pickSM(Behavior):
 		_state_machine.userdata.namespace = '/ariac/gantry'
 		_state_machine.userdata.robot_name = ''
 		_state_machine.userdata.column_title = ''
+		_state_machine.userdata.parameter_name = 'ariac_tables_unit1'
+		_state_machine.userdata.table_name = 'assembly_stations'
+		_state_machine.userdata.index_title = 'as'
+		_state_machine.userdata.column_title = column_title
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -88,14 +96,14 @@ class Unit_2_pickSM(Behavior):
 			# x:1414 y:144
 			OperatableStateMachine.add('chosing right',
 										ReplaceState(),
-										transitions={'done': 'lookup robot pick position'},
+										transitions={'done': 'lookup robot pick position1'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value': 'right_pick', 'result': 'column_title'})
 
 			# x:1203 y:627
 			OperatableStateMachine.add('compute move to part',
 										ComputeGraspAriacState(joint_names=['gantry_arm_elbow_joint', 'gantry_arm_shoulder_lift_joint', 'gantry_arm_shoulder_pan_joint', 'gantry_arm_wrist_1_joint', 'gantry_arm_wrist_2_joint', 'gantry_arm_wrist_3_joint']),
-										transitions={'continue': 'finished', 'failed': 'failed'},
+										transitions={'continue': 'unit_2_Gripper_correcting', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off},
 										remapping={'move_group': 'move_group', 'namespace': 'namespace', 'tool_link': 'tool_link', 'pose': 'pose', 'offset': 'part_height', 'rotation': 'rotation', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
@@ -106,10 +114,10 @@ class Unit_2_pickSM(Behavior):
 										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'products': 'assembly_products', 'index': 'current_assembly_product', 'type': 'assembly_part', 'pose': 'assembly_offset'})
 
-			# x:982 y:44
+			# x:874 y:45
 			OperatableStateMachine.add('look what side part is',
 										DetectPartCameraAndSideAriacState(time_out=0.5),
-										transitions={'continue': 'products left or right', 'failed': 'failed', 'not_found': 'failed'},
+										transitions={'continue': 'what side', 'failed': 'failed', 'not_found': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'ref_frame': 'ref_frame', 'camera_topic': 'camera_topic', 'camera_frame': 'camera_frame', 'part': 'assembly_part', 'pose': 'pose', 'side': 'side'})
 
@@ -127,12 +135,12 @@ class Unit_2_pickSM(Behavior):
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'assembly_part', 'column_value': 'part_height'})
 
-			# x:1286 y:273
-			OperatableStateMachine.add('lookup robot pick position',
-										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='assembly_stations', index_title='as', column_title=column_title),
+			# x:1267 y:255
+			OperatableStateMachine.add('lookup robot pick position1',
+										LookupFromTableSpecialState(),
 										transitions={'found': 'move to pick', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
+										remapping={'parameter_name': 'parameter_name', 'table_name': 'table_name', 'index_title': 'index_title', 'column_title': 'column_title', 'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
 
 			# x:1284 y:388
 			OperatableStateMachine.add('move to pick',
@@ -148,10 +156,24 @@ class Unit_2_pickSM(Behavior):
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'side', 'value_b': 'true_value'})
 
+			# x:874 y:618
+			OperatableStateMachine.add('unit_2_Gripper_correcting',
+										self.use_behavior(unit_2_Gripper_correctingSM, 'unit_2_Gripper_correcting'),
+										transitions={'finished': 'finished', 'failed': 'failed'},
+										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
+										remapping={'part_pose': 'pose', 'part_height': 'part_height', 'move_group': 'move_group', 'namespace': 'namespace', 'tool_link': 'tool_link', 'action_topic': 'action_topic'})
+
+			# x:1121 y:35
+			OperatableStateMachine.add('what side',
+										MessageState(),
+										transitions={'continue': 'products left or right'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'message': 'side'})
+
 			# x:1138 y:143
 			OperatableStateMachine.add('chosing left',
 										ReplaceState(),
-										transitions={'done': 'lookup robot pick position'},
+										transitions={'done': 'lookup robot pick position1'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value': 'left_pick', 'result': 'column_title'})
 
