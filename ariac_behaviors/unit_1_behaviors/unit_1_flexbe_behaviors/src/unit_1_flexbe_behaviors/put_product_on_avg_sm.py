@@ -70,7 +70,7 @@ class putproductonavgSM(Behavior):
 		_state_machine.userdata.action_topic = '/move_group'
 		_state_machine.userdata.agv_pregrasp = ''
 		_state_machine.userdata.robot_name = ''
-		_state_machine.userdata.offset_drop = 0.1
+		_state_machine.userdata.offset_drop = 0.2
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
