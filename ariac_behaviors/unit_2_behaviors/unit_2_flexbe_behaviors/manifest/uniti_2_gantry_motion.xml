@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="uniti_2_gantry_motion">
+
+	<executable package_path="unit_2_flexbe_behaviors.uniti_2_gantry_motion_sm" class="uniti_2_gantry_motionSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Tue Jun 22 2021</date>
+	<description>
+		moving gantry to proper positions
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>
