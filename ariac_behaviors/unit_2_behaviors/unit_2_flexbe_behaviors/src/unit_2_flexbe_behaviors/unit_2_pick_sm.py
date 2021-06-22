@@ -8,7 +8,7 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from ariac_flexbe_states.detect_part_camera_ariac_state import DetectPartCameraAriacState
+from ariac_flexbe_states.determine_position import DetectPartCameraAriacState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
 from ariac_logistics_flexbe_states.get_part_from_products_state import GetPartFromProductsState
 # Additional imports can be added inside the following tags
@@ -89,7 +89,7 @@ class Unit_2_pickSM(Behavior):
 										DetectPartCameraAriacState(time_out=0.5),
 										transitions={'continue': 'finished', 'failed': 'failed', 'not_found': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'ref_frame': 'ref_frame', 'camera_topic': 'camera_topic', 'camera_frame': 'camera_frame', 'part': 'assembly_part', 'pose': 'pose'})
+										remapping={'ref_frame': 'ref_frame', 'camera_topic': 'camera_topic', 'camera_frame': 'camera_frame', 'part': 'assembly_part', 'pose': 'pose', 'side': 'side'})
 
 
 		return _state_machine

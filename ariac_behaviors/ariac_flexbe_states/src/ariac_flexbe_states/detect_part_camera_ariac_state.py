@@ -121,8 +121,6 @@ class DetectPartCameraAriacState(EventState):
 					#rospy.logwarn(part_pose)
 
 					userdata.pose = part_pose
-					if part_pose.position.y < 0:
-						self._side = False
 					return 'continue'
 			userdata.pose = None
 			return 'not_found'

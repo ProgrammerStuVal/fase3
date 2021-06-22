@@ -85,7 +85,7 @@ class Unit_2_Get_orderSM(Behavior):
 										self.use_behavior(Unit_2_pickSM, 'Unit_2_pick'),
 										transitions={'finished': 'finished', 'failed': 'failed'},
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
-										remapping={'assembly_products': 'assembly_products'})
+										remapping={'assembly_products': 'assembly_products', 'station_id': 'station_id'})
 
 
 		return _state_machine
