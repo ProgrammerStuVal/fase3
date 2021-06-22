@@ -57,7 +57,7 @@ Created on Sep 5 2018
 
 '''
 
-class DetectPartCameraAriacState(EventState):
+class DetectPartCameraAndSideAriacState(EventState):
 	'''
 	State to detect the pose of the part with any of the cameras in the factory simulation of the Ariac
 	-- time_out		float		Time in withs the camera to have detected the part
@@ -74,7 +74,7 @@ class DetectPartCameraAriacState(EventState):
 
 	def __init__(self, time_out = 0.5):
 		# Declare outcomes, input_keys, and output_keys by calling the super constructor with the corresponding arguments.
-		super(DetectPartCameraAriacState, self).__init__(outcomes = ['continue', 'failed', 'not_found'], input_keys = ['ref_frame', 'camera_topic', 'camera_frame', 'part'], output_keys = ['pose', 'side'])
+		super(DetectPartCameraAndSideAriacState, self).__init__(outcomes = ['continue', 'failed', 'not_found'], input_keys = ['ref_frame', 'camera_topic', 'camera_frame', 'part'], output_keys = ['pose', 'side'])
 
 		# Store state parameter for later use.
 		self._wait = time_out
@@ -121,7 +121,7 @@ class DetectPartCameraAriacState(EventState):
 					#rospy.logwarn(part_pose)
 
 					userdata.pose = part_pose
-					if part_pose.position.y < 0:
+					if part_pose.pose.position.y < 0:
 						self._side = False
 					else:
 						self._side = True

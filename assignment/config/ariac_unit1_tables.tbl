@@ -81,25 +81,39 @@
 		    <agv_prepose value="kitting_agv_4" />
        </agv>
     </table>
-    
+
     <table name = "assembly_stations">
        <as name="as1">
 		    <as_camera_topic value="/ariac/logical_camera_station_1" />
-		    <as_camera_frame value="logical_camera_station_1" />
-		    <as_global_pos value="gantry_wp_as1_as3" />
-		    <as_direct_pos value="logical_camera_station_1" />
+		    <as_camera_frame value="logical_camera_station_1_frame" />
+		    <as_global_pos value="gantry_area_as1_as3" />
+		    <as_direct_pos value="gantry_home_as1" />
+        <as_left_pick value="gantry_pick_as1_l" />
+        <as_right_pick value="gantry_pick_as1_r" />
        </as>
        <as name="as2">
 		    <as_camera_topic value="/ariac/logical_camera_station_2" />
-		    <as_camera_frame value="logical_camera_station_2" />
+		    <as_camera_frame value="logical_camera_station_2_frame" />
+        <as_global_pos value="gantry_area_as2_as4" />
+        <as_direct_pos value="gantry_home_as2" />
+        <as_left_pick value="gantry_pick_as2_l" />
+        <as_right_pick value="gantry_pick_as2_r" />
        </as>
        <as name="as3">
 		    <as_camera_topic value="/ariac/logical_camera_station_3" />
-		    <as_camera_frame value="logical_camera_station_3" />
+		    <as_camera_frame value="logical_camera_station_3_frame" />
+        <as_global_pos value="gantry_area_as1_as3" />
+        <as_direct_pos value="gantry_home_as3" />
+        <as_left_pick value="gantry_pick_as3_l" />
+        <as_right_pick value="gantry_pick_as3_r" />
        </as>
-       <asa name="as4">
+       <as name="as4">
 		    <as_camera_topic value="/ariac/logical_camera_station_4" />
-		    <as_camera_frame value="logical_camera_station_4" />
+		    <as_camera_frame value="logical_camera_station_4_frame" />
+        <as_global_pos value="gantry_area_as2_as4" />
+        <as_direct_pos value="gantry_home_as4" />
+        <as_left_pick value="gantry_pick_as4_l" />
+        <as_right_pick value="gantry_pick_as4_r" />
        </as>
     </table>
 </tables>
