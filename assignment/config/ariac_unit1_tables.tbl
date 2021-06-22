@@ -81,6 +81,7 @@
 		    <agv_prepose value="kitting_agv_4" />
        </agv>
     </table>
+    
     <table name = "assembly_stations">
        <as name="as1">
 		    <as_camera_topic value="/ariac/logical_camera_station_1" />
