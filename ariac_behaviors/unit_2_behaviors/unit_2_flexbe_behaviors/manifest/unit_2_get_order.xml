@@ -12,6 +12,7 @@
 
 
 	<!-- Contained Behaviors -->
+	<contains name="uniti_2_gantry_motion" />
 	<contains name="Unit_2_pick" />
 
 	<!-- Available Parameters -->
