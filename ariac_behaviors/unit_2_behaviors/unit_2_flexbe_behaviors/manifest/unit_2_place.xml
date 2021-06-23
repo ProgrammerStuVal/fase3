@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="unit_2_place">
+
+	<executable package_path="unit_2_flexbe_behaviors.unit_2_place_sm" class="unit_2_placeSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Wed Jun 23 2021</date>
+	<description>
+		placing objects in box
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

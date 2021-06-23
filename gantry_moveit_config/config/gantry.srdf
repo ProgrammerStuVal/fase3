@@ -55,30 +55,30 @@
         <joint name="torso_rail_joint" value="-3.08" />
     </group_state>
     <group_state name="gantry_pick_as1_l" group="gantry_torso">
-        <joint name="small_long_joint" value="-3.40" />
+        <joint name="small_long_joint" value="-3.45" />
         <joint name="torso_base_main_joint" value="3.14" />
-        <joint name="torso_rail_joint" value="-3.08" />
+        <joint name="torso_rail_joint" value="-2.63" />
     </group_state>
     <group_state name="gantry_pick_as1_r" group="gantry_torso">
-        <joint name="small_long_joint" value="-3.40" />
+        <joint name="small_long_joint" value="-3.45" />
         <joint name="torso_base_main_joint" value="0" />
-        <joint name="torso_rail_joint" value="-3.08" />
+        <joint name="torso_rail_joint" value="-3.89" />
     </group_state>
 
     <group_state name="gantry_home_as2" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+        <joint name="small_long_joint" value="-8.45" />
         <joint name="torso_base_main_joint" value="1.57" />
         <joint name="torso_rail_joint" value="-3.08" />
     </group_state>
     <group_state name="gantry_pick_as2_l" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+        <joint name="small_long_joint" value="-8.45" />
         <joint name="torso_base_main_joint" value="3.14" />
-        <joint name="torso_rail_joint" value="-3.08" />
+        <joint name="torso_rail_joint" value="-2.63" />
     </group_state>
     <group_state name="gantry_pick_as2_r" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+        <joint name="small_long_joint" value="-8.45" />
         <joint name="torso_base_main_joint" value="0" />
-        <joint name="torso_rail_joint" value="-3.08" />
+        <joint name="torso_rail_joint" value="-3.89" />
     </group_state>
 
     <group_state name="gantry_home_as3" group="gantry_torso">
@@ -87,31 +87,52 @@
         <joint name="torso_rail_joint" value="3.08" />
     </group_state>
     <group_state name="gantry_pick_as3_l" group="gantry_torso">
-        <joint name="small_long_joint" value="-3.40" />
+        <joint name="small_long_joint" value="-3.45" />
         <joint name="torso_base_main_joint" value="3.14" />
-        <joint name="torso_rail_joint" value="3.08" />
+        <joint name="torso_rail_joint" value="3.89" />
     </group_state>
     <group_state name="gantry_pick_as3_r" group="gantry_torso">
-        <joint name="small_long_joint" value="-3.40" />
+        <joint name="small_long_joint" value="-3.45" />
         <joint name="torso_base_main_joint" value="0" />
-        <joint name="torso_rail_joint" value="3.08" />
+        <joint name="torso_rail_joint" value="2.63" />
     </group_state>
 
     <group_state name="gantry_home_as4" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+        <joint name="small_long_joint" value="-8.55" />
         <joint name="torso_base_main_joint" value="1.57" />
         <joint name="torso_rail_joint" value="3.08" />
     </group_state>
-    <group_state name="gantry_pick_as4_l" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+    <group_state name="gantry_prepick_as4_l" group="gantry_torso">
+        <joint name="small_long_joint" value="-8.55" />
         <joint name="torso_base_main_joint" value="3.14" />
         <joint name="torso_rail_joint" value="3.08" />
     </group_state>
-    <group_state name="gantry_pick_as4_r" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+    <group_state name="gantry_pick_as4_l" group="gantry_torso">
+        <joint name="small_long_joint" value="-8.55" />
+        <joint name="torso_base_main_joint" value="3.14" />
+        <joint name="torso_rail_joint" value="3.89" />
+    </group_state>
+    <group_state name="gantry_prepick_as4_r" group="gantry_torso">
+        <joint name="small_long_joint" value="-8.55" />
         <joint name="torso_base_main_joint" value="0" />
         <joint name="torso_rail_joint" value="3.08" />
     </group_state>
+    <group_state name="gantry_pick_as4_r" group="gantry_torso">
+        <joint name="small_long_joint" value="-8.55" />
+        <joint name="torso_base_main_joint" value="0" />
+        <joint name="torso_rail_joint" value="2.05" />
+    </group_state>
+
+
+
+    <group_state name="gantry_preplace_as4" group="gantry_torso">
+        <joint name="small_long_joint" value="-9.44" />
+        <joint name="torso_base_main_joint" value="1.57" />
+        <joint name="torso_rail_joint" value="3.08" />
+    </group_state>
+
+
+
 
     <group_state name="gantry_wp_as1_as3" group="gantry_torso">
         <joint name="small_long_joint" value="3.40" />
@@ -119,7 +140,7 @@
         <joint name="torso_rail_joint" value="0" />
     </group_state>
     <group_state name="gantry_wp_as2_as4" group="gantry_torso">
-        <joint name="small_long_joint" value="-8.30" />
+        <joint name="small_long_joint" value="-8.35" />
         <joint name="torso_base_main_joint" value="0" />
         <joint name="torso_rail_joint" value="0" />
     </group_state>
@@ -143,6 +164,19 @@
         <joint name="gantry_arm_wrist_2_joint" value="1.55" />
         <joint name="gantry_arm_wrist_3_joint" value="0.83" />
     </group_state>
+
+
+
+    <group_state name="gantry_arm_up" group="gantry_arm">
+        <joint name="gantry_arm_elbow_joint" value="2.46" />
+        <joint name="gantry_arm_shoulder_lift_joint" value="-1.90" />
+        <joint name="gantry_arm_shoulder_pan_joint" value="0" />
+        <joint name="gantry_arm_wrist_1_joint" value="-0.5" />
+        <joint name="gantry_arm_wrist_2_joint" value="1.65" />
+        <joint name="gantry_arm_wrist_3_joint" value="0.0" />
+    </group_state>
+
+
 
     <group_state name="gantry_home" group="gantry_full">
         <joint name="gantry_arm_elbow_joint" value="2.5" />

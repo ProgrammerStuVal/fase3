@@ -12,6 +12,7 @@
 
 
 	<!-- Contained Behaviors -->
+	<contains name="unit_2_place" />
 	<contains name="uniti_2_gantry_motion" />
 	<contains name="Unit_2_pick" />
 

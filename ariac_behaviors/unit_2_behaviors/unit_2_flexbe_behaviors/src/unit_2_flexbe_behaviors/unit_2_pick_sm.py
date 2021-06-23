@@ -8,8 +8,8 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from ariac_flexbe_states.compute_grasp_ariac_state import ComputeGraspAriacState
 from ariac_flexbe_states.detect_part_camera_and_side import DetectPartCameraAndSideAriacState
+from ariac_flexbe_states.detect_part_camera_ariac_state import DetectPartCameraAriacState
 from ariac_flexbe_states.lookup_from_table import LookupFromTableState
 from ariac_flexbe_states.lookup_from_table_special import LookupFromTableSpecialState
 from ariac_flexbe_states.message_state import MessageState
@@ -53,9 +53,9 @@ class Unit_2_pickSM(Behavior):
 
 
 	def create(self):
-		# x:708 y:634, x:686 y:303
+		# x:91 y:468, x:686 y:303
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['assembly_products', 'station_id'])
-		_state_machine.userdata.ref_frame = 'world'
+		_state_machine.userdata.ref_frame = 'torso_main'
 		_state_machine.userdata.camera_topic = ''
 		_state_machine.userdata.camera_frame = ''
 		_state_machine.userdata.assembly_part = ''
@@ -63,9 +63,9 @@ class Unit_2_pickSM(Behavior):
 		_state_machine.userdata.current_assembly_product = 0
 		_state_machine.userdata.station_id = ''
 		_state_machine.userdata.offset = []
-		_state_machine.userdata.side = False
+		_state_machine.userdata.side = True
 		_state_machine.userdata.true_value = True
-		_state_machine.userdata.tool_link = 'ee_link'
+		_state_machine.userdata.tool_link = 'gantry_arm_ee_link'
 		_state_machine.userdata.rotation = 0.0
 		_state_machine.userdata.left_pick = 'as_left_pick'
 		_state_machine.userdata.right_pick = 'as_right_pick'
@@ -73,11 +73,14 @@ class Unit_2_pickSM(Behavior):
 		_state_machine.userdata.action_topic = '/move_group'
 		_state_machine.userdata.namespace = '/ariac/gantry'
 		_state_machine.userdata.robot_name = ''
-		_state_machine.userdata.column_title = ''
 		_state_machine.userdata.parameter_name = 'ariac_tables_unit1'
 		_state_machine.userdata.table_name = 'assembly_stations'
 		_state_machine.userdata.index_title = 'as'
-		_state_machine.userdata.column_title = column_title
+		_state_machine.userdata.ref_frame2 = 'world'
+		_state_machine.userdata.move_group_2 = 'gantry_arm'
+		_state_machine.userdata.left_prepick = 'as_left_prepick'
+		_state_machine.userdata.right_prepick = 'as_right_prepick'
+		_state_machine.userdata.arm_up_pos = 'gantry_arm_up'
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -86,26 +89,33 @@ class Unit_2_pickSM(Behavior):
 
 
 		with _state_machine:
-			# x:135 y:41
-			OperatableStateMachine.add('lookup camera topic',
-										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='assembly_stations', index_title='as', column_title='as_camera_topic'),
-										transitions={'found': 'lookup camera frame', 'not_found': 'failed'},
-										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'index_value': 'assembly_part', 'column_value': 'camera_topic'})
+			# x:25 y:103
+			OperatableStateMachine.add('whag as',
+										MessageState(),
+										transitions={'continue': 'lookup camera topic'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'message': 'station_id'})
+
+			# x:1142 y:256
+			OperatableStateMachine.add('chosing left prepick',
+										ReplaceState(),
+										transitions={'done': 'lookup robot prepick position'},
+										autonomy={'done': Autonomy.Off},
+										remapping={'value': 'left_prepick', 'result': 'column_title_2'})
 
 			# x:1414 y:144
-			OperatableStateMachine.add('chosing right',
+			OperatableStateMachine.add('chosing right pick',
 										ReplaceState(),
-										transitions={'done': 'lookup robot pick position1'},
+										transitions={'done': 'chosing right prepick'},
 										autonomy={'done': Autonomy.Off},
-										remapping={'value': 'right_pick', 'result': 'column_title'})
+										remapping={'value': 'right_pick', 'result': 'column_title_'})
 
-			# x:1203 y:627
-			OperatableStateMachine.add('compute move to part',
-										ComputeGraspAriacState(joint_names=['gantry_arm_elbow_joint', 'gantry_arm_shoulder_lift_joint', 'gantry_arm_shoulder_pan_joint', 'gantry_arm_wrist_1_joint', 'gantry_arm_wrist_2_joint', 'gantry_arm_wrist_3_joint']),
-										transitions={'continue': 'unit_2_Gripper_correcting', 'failed': 'failed'},
-										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off},
-										remapping={'move_group': 'move_group', 'namespace': 'namespace', 'tool_link': 'tool_link', 'pose': 'pose', 'offset': 'part_height', 'rotation': 'rotation', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
+			# x:1419 y:250
+			OperatableStateMachine.add('chosing right prepick',
+										ReplaceState(),
+										transitions={'done': 'lookup robot prepick position'},
+										autonomy={'done': Autonomy.Off},
+										remapping={'value': 'right_prepick', 'result': 'column_title_2'})
 
 			# x:647 y:47
 			OperatableStateMachine.add('get part',
@@ -117,9 +127,16 @@ class Unit_2_pickSM(Behavior):
 			# x:874 y:45
 			OperatableStateMachine.add('look what side part is',
 										DetectPartCameraAndSideAriacState(time_out=0.5),
-										transitions={'continue': 'what side', 'failed': 'failed', 'not_found': 'failed'},
+										transitions={'continue': 'what pose', 'failed': 'failed', 'not_found': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'ref_frame': 'ref_frame', 'camera_topic': 'camera_topic', 'camera_frame': 'camera_frame', 'part': 'assembly_part', 'pose': 'pose', 'side': 'side'})
+
+			# x:1089 y:752
+			OperatableStateMachine.add('look where part is now',
+										DetectPartCameraAriacState(time_out=0.5),
+										transitions={'continue': 'unit_2_Gripper_correcting', 'failed': 'failed', 'not_found': 'failed'},
+										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'ref_frame': 'ref_frame2', 'camera_topic': 'camera_topic', 'camera_frame': 'camera_frame', 'part': 'assembly_part', 'pose': 'pose'})
 
 			# x:395 y:31
 			OperatableStateMachine.add('lookup camera frame',
@@ -128,40 +145,89 @@ class Unit_2_pickSM(Behavior):
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'station_id', 'column_value': 'camera_frame'})
 
-			# x:1336 y:486
+			# x:1302 y:785
 			OperatableStateMachine.add('lookup camera frame_2',
 										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='part_height_table', index_title='part_type', column_title='part_height'),
-										transitions={'found': 'compute move to part', 'not_found': 'failed'},
+										transitions={'found': 'look where part is now', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'assembly_part', 'column_value': 'part_height'})
 
-			# x:1267 y:255
-			OperatableStateMachine.add('lookup robot pick position1',
+			# x:135 y:41
+			OperatableStateMachine.add('lookup camera topic',
+										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='assembly_stations', index_title='as', column_title='as_camera_topic'),
+										transitions={'found': 'lookup camera frame', 'not_found': 'failed'},
+										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'index_value': 'station_id', 'column_value': 'camera_topic'})
+
+			# x:1304 y:560
+			OperatableStateMachine.add('lookup robot pick position',
 										LookupFromTableSpecialState(),
 										transitions={'found': 'move to pick', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
-										remapping={'parameter_name': 'parameter_name', 'table_name': 'table_name', 'index_title': 'index_title', 'column_title': 'column_title', 'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
+										remapping={'parameter_name': 'parameter_name', 'table_name': 'table_name', 'index_title': 'index_title', 'column_title': 'column_title_', 'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
 
-			# x:1284 y:388
+			# x:1258 y:329
+			OperatableStateMachine.add('lookup robot prepick position',
+										LookupFromTableSpecialState(),
+										transitions={'found': 'move to pick_2', 'not_found': 'failed'},
+										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'parameter_name': 'parameter_name', 'table_name': 'table_name', 'index_title': 'index_title', 'column_title': 'column_title_2', 'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
+
+			# x:331 y:655
+			OperatableStateMachine.add('lookup robot prepick position_2',
+										LookupFromTableSpecialState(),
+										transitions={'found': 'move to pick_2_2', 'not_found': 'failed'},
+										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
+										remapping={'parameter_name': 'parameter_name', 'table_name': 'table_name', 'index_title': 'index_title', 'column_title': 'column_title_2', 'index_value': 'station_id', 'column_value': 'robot_pick_pos'})
+
+			# x:637 y:649
+			OperatableStateMachine.add('move arm up',
+										SrdfStateToMoveitAriac(),
+										transitions={'reached': 'lookup robot prepick position_2', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
+										remapping={'config_name': 'arm_up_pos', 'move_group': 'move_group_2', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
+
+			# x:1332 y:654
 			OperatableStateMachine.add('move to pick',
 										SrdfStateToMoveitAriac(),
 										transitions={'reached': 'lookup camera frame_2', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
 										remapping={'config_name': 'robot_pick_pos', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
+			# x:1284 y:412
+			OperatableStateMachine.add('move to pick_2',
+										SrdfStateToMoveitAriac(),
+										transitions={'reached': 'lookup robot pick position', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
+										remapping={'config_name': 'robot_pick_pos', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
+
+			# x:180 y:532
+			OperatableStateMachine.add('move to pick_2_2',
+										SrdfStateToMoveitAriac(),
+										transitions={'reached': 'finished', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
+										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
+										remapping={'config_name': 'robot_pick_pos', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
+
 			# x:1274 y:50
 			OperatableStateMachine.add('products left or right',
 										EqualState(),
-										transitions={'true': 'chosing left', 'false': 'chosing right'},
+										transitions={'true': 'chosing left pick', 'false': 'chosing right pick'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'side', 'value_b': 'true_value'})
 
-			# x:874 y:618
+			# x:889 y:636
 			OperatableStateMachine.add('unit_2_Gripper_correcting',
 										self.use_behavior(unit_2_Gripper_correctingSM, 'unit_2_Gripper_correcting'),
-										transitions={'finished': 'finished', 'failed': 'failed'},
+										transitions={'finished': 'move arm up', 'failed': 'failed'},
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit},
-										remapping={'part_pose': 'pose', 'part_height': 'part_height', 'move_group': 'move_group', 'namespace': 'namespace', 'tool_link': 'tool_link', 'action_topic': 'action_topic'})
+										remapping={'part_pose': 'pose', 'part_height': 'part_height', 'move_group': 'move_group_2', 'namespace': 'namespace', 'tool_link': 'tool_link', 'action_topic': 'action_topic'})
+
+			# x:981 y:135
+			OperatableStateMachine.add('what pose',
+										MessageState(),
+										transitions={'continue': 'what side'},
+										autonomy={'continue': Autonomy.Off},
+										remapping={'message': 'pose'})
 
 			# x:1121 y:35
 			OperatableStateMachine.add('what side',
@@ -171,11 +237,11 @@ class Unit_2_pickSM(Behavior):
 										remapping={'message': 'side'})
 
 			# x:1138 y:143
-			OperatableStateMachine.add('chosing left',
+			OperatableStateMachine.add('chosing left pick',
 										ReplaceState(),
-										transitions={'done': 'lookup robot pick position1'},
+										transitions={'done': 'chosing left prepick'},
 										autonomy={'done': Autonomy.Off},
-										remapping={'value': 'left_pick', 'result': 'column_title'})
+										remapping={'value': 'left_pick', 'result': 'column_title_'})
 
 
 		return _state_machine

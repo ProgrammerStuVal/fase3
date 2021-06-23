@@ -100,20 +100,20 @@ class unit_2_Gripper_correctingSM(Behavior):
 
 			# x:1108 y:165
 			OperatableStateMachine.add('get_gripper_status',
-										GetGripperStatusState(topic_name='/ariac/kitting/arm/gripper/state'),
+										GetGripperStatusState(topic_name='/ariac/gantry/arm/gripper/state'),
 										transitions={'continue': 'status_true_if', 'fail': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'fail': Autonomy.Off},
 										remapping={'enabled': 'gripper_enabled', 'attached': 'gripper_attached'})
 
 			# x:465 y:480
 			OperatableStateMachine.add('gripper_off',
-										VacuumGripperControlState(enable=False, service_name='/ariac/kitting/arm/gripper/control'),
+										VacuumGripperControlState(enable=False, service_name='/ariac/gantry/arm/gripper/control'),
 										transitions={'continue': 'move_down_more', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
 			# x:897 y:29
 			OperatableStateMachine.add('gripper_on',
-										VacuumGripperControlState(enable=True, service_name='/ariac/kitting/arm/gripper/control'),
+										VacuumGripperControlState(enable=True, service_name='/ariac/gantry/arm/gripper/control'),
 										transitions={'continue': 'wait_for_gripper_to_attach', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
@@ -154,7 +154,7 @@ class unit_2_Gripper_correctingSM(Behavior):
 
 			# x:1100 y:31
 			OperatableStateMachine.add('wait_for_gripper_to_attach',
-										WaitState(wait_time=1),
+										WaitState(wait_time=0.1),
 										transitions={'done': 'get_gripper_status'},
 										autonomy={'done': Autonomy.Off})
 

@@ -31,17 +31,13 @@ class LookupFromTableSpecialState(EventState):
         '''
         Constructor
         '''
-        super(LookupFromTableState, self).__init__(outcomes=['found', 'not_found'],
+        super(LookupFromTableSpecialState, self).__init__(outcomes=['found', 'not_found'],
             input_keys = ['parameter_name', 'table_name', 'index_title', 'column_title', 'index_value'],
             output_keys=['column_value'])
 
 
         self._param_error = False
         self._table = None
-        self._parameter_name = userdata.parameter_name
-        self._table_name = userdata.table_name
-        self._index_title = userdata.index_title
-        self._column_title = userdata.column_title
 
 
     def execute(self, userdata):
@@ -51,6 +47,10 @@ class LookupFromTableSpecialState(EventState):
 
 
     def on_enter(self, userdata):
+	self._parameter_name = userdata.parameter_name
+        self._table_name = userdata.table_name
+        self._index_title = userdata.index_title
+        self._column_title = userdata.column_title
 
         self._success         = False
 
