@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Multi_Threading">
+
+	<executable package_path="unit_2_flexbe_behaviors.multi_threading_sm" class="Multi_ThreadingSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Thu Jun 24 2021</date>
+	<description>
+		Multi threading programm that allows unit 1 and 2 to work at the same time
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="unit_1_get_order" />
+	<contains name="Unit_2_Get_order" />
+
+	<!-- Available Parameters -->
+
+</behavior>
