@@ -154,7 +154,7 @@ class Gripper_correctingSM(Behavior):
 
 			# x:1100 y:31
 			OperatableStateMachine.add('wait_for_gripper_to_attach',
-										WaitState(wait_time=1),
+										WaitState(wait_time=0.4),
 										transitions={'done': 'get_gripper_status'},
 										autonomy={'done': Autonomy.Off})
 
