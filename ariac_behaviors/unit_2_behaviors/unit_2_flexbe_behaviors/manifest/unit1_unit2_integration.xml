@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="unit1_unit2_integration">
+
+	<executable package_path="unit_2_flexbe_behaviors.unit1_unit2_integration_sm" class="unit1_unit2_integrationSM" />
+	<tagstring></tagstring>
+	<author>Nick</author>
+	<date>Thu Jun 24 2021</date>
+	<description>
+		integration programm of unit 1 and 2
+	</description>
+
+
+	<!-- Contained Behaviors -->
+	<contains name="put product on avg" />
+	<contains name="unit_1_get_products_from_bin" />
+	<contains name="unit_2_place" />
+	<contains name="uniti_2_gantry_motion" />
+	<contains name="Unit_2_pick" />
+
+	<!-- Available Parameters -->
+
+</behavior>

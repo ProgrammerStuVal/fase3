@@ -57,7 +57,7 @@ class Unit_2_Get_orderSM(Behavior):
 
 
 	def create(self):
-		# x:507 y:547, x:746 y:247
+		# x:408 y:537, x:746 y:247
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 		_state_machine.userdata.current_assembly = 0
 		_state_machine.userdata.current_product = 0

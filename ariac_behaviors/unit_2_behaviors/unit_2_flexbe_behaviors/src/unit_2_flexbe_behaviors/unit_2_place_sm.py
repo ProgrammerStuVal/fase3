@@ -60,7 +60,7 @@ class unit_2_placeSM(Behavior):
 		_state_machine.userdata.robot_name = ''
 		_state_machine.userdata.ref_frame = 'world'
 		_state_machine.userdata.tool_link = 'gantry_arm_ee_link'
-		_state_machine.userdata.part_height = 0.06
+		_state_machine.userdata.part_height = 0.03
 		_state_machine.userdata.rotation = 0.0
 		_state_machine.userdata.move_group_arm = 'gantry_arm'
 		_state_machine.userdata.arm_up_pos = 'gantry_arm_up'
