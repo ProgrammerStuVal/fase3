@@ -51,7 +51,7 @@ class unit_2_Gripper_correctingSM(Behavior):
 
 
 	def create(self):
-		# x:1369 y:630, x:608 y:211
+		# x:1316 y:710, x:625 y:337
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['part_pose', 'part_height', 'move_group', 'namespace', 'tool_link', 'action_topic'])
 		_state_machine.userdata.part_pose = []
 		_state_machine.userdata.part_height = ''
@@ -77,88 +77,94 @@ class unit_2_Gripper_correctingSM(Behavior):
 
 
 		with _state_machine:
-			# x:145 y:37
+			# x:108 y:104
 			OperatableStateMachine.add('trans_text_to_float',
 										TextToFloatState(),
 										transitions={'done': 'compute_move'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'text_value': 'part_height', 'float_value': 'part_height_float'})
 
-			# x:1116 y:493
+			# x:1129 y:565
 			OperatableStateMachine.add('check_three_times',
 										EqualState(),
-										transitions={'true': 'reset_iterator', 'false': 'status_true_if'},
+										transitions={'true': 'reset_iterator', 'false': 'add_iteration'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'gripper_attach_iterator', 'value_b': 'three_value'})
 
-			# x:391 y:36
+			# x:390 y:105
 			OperatableStateMachine.add('compute_move',
 										ComputeGraspAriacState(joint_names=['gantry_arm_elbow_joint', 'gantry_arm_shoulder_lift_joint', 'gantry_arm_shoulder_pan_joint', 'gantry_arm_wrist_1_joint', 'gantry_arm_wrist_2_joint', 'gantry_arm_wrist_3_joint']),
 										transitions={'continue': 'move_to_part', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off},
 										remapping={'move_group': 'move_group', 'namespace': 'namespace', 'tool_link': 'tool_link', 'pose': 'part_pose', 'offset': 'part_height_float', 'rotation': 'rotation', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
-			# x:1108 y:165
+			# x:1127 y:227
 			OperatableStateMachine.add('get_gripper_status',
 										GetGripperStatusState(topic_name='/ariac/gantry/arm/gripper/state'),
 										transitions={'continue': 'status_true_if', 'fail': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'fail': Autonomy.Off},
 										remapping={'enabled': 'gripper_enabled', 'attached': 'gripper_attached'})
 
-			# x:465 y:480
+			# x:463 y:573
 			OperatableStateMachine.add('gripper_off',
 										VacuumGripperControlState(enable=False, service_name='/ariac/gantry/arm/gripper/control'),
 										transitions={'continue': 'move_down_more', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
-			# x:897 y:29
+			# x:900 y:112
 			OperatableStateMachine.add('gripper_on',
 										VacuumGripperControlState(enable=True, service_name='/ariac/gantry/arm/gripper/control'),
 										transitions={'continue': 'wait_for_gripper_to_attach', 'failed': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'failed': Autonomy.Off})
 
-			# x:255 y:490
+			# x:245 y:569
 			OperatableStateMachine.add('move_down_more',
 										AddNumericState(),
 										transitions={'done': 'compute_move'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'part_height_float', 'value_b': 'down_move', 'result': 'part_height_float'})
 
-			# x:664 y:30
+			# x:652 y:108
 			OperatableStateMachine.add('move_to_part',
 										MoveitToJointsDynAriacState(),
-										transitions={'reached': 'gripper_on', 'planning_failed': 'failed', 'control_failed': 'failed'},
+										transitions={'reached': 'gripper_on', 'planning_failed': 'retry_move_part', 'control_failed': 'retry_move_part'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off},
 										remapping={'namespace': 'namespace', 'move_group': 'move_group', 'action_topic': 'action_topic', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
-			# x:916 y:486
+			# x:919 y:568
 			OperatableStateMachine.add('reset_iterator',
 										ReplaceState(),
 										transitions={'done': 'status_true_if_2'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value': 'zero', 'result': 'gripper_attach_iterator'})
 
-			# x:1102 y:279
+			# x:666 y:14
+			OperatableStateMachine.add('retry_move_part',
+										WaitState(wait_time=0.5),
+										transitions={'done': 'move_to_part'},
+										autonomy={'done': Autonomy.Off})
+
+			# x:1118 y:341
 			OperatableStateMachine.add('status_true_if',
 										EqualState(),
 										transitions={'true': 'finished', 'false': 'add_iteration'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'gripper_attached', 'value_b': 'True_value'})
 
-			# x:695 y:478
+			# x:695 y:569
 			OperatableStateMachine.add('status_true_if_2',
 										EqualState(),
 										transitions={'true': 'finished', 'false': 'gripper_off'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'gripper_attached', 'value_b': 'True_value'})
 
-			# x:1100 y:31
+			# x:1115 y:118
 			OperatableStateMachine.add('wait_for_gripper_to_attach',
 										WaitState(wait_time=0.1),
 										transitions={'done': 'get_gripper_status'},
 										autonomy={'done': Autonomy.Off})
 
-			# x:1112 y:403
+			# x:1119 y:456
 			OperatableStateMachine.add('add_iteration',
 										AddNumericState(),
 										transitions={'done': 'check_three_times'},
