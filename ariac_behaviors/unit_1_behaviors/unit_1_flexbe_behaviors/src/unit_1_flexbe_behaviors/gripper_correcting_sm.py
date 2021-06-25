@@ -87,7 +87,7 @@ class Gripper_correctingSM(Behavior):
 			# x:1116 y:493
 			OperatableStateMachine.add('check_three_times',
 										EqualState(),
-										transitions={'true': 'reset_iterator', 'false': 'status_true_if'},
+										transitions={'true': 'reset_iterator', 'false': 'get_gripper_status'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'gripper_attach_iterator', 'value_b': 'three_value'})
 

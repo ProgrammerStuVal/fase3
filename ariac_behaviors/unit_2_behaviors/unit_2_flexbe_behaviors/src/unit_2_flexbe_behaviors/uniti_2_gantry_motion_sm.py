@@ -74,7 +74,7 @@ class uniti_2_gantry_motionSM(Behavior):
 										remapping={'config_name': 'station_area', 'move_group': 'move_group', 'namespace': 'namespace', 'action_topic': 'action_topic', 'robot_name': 'robot_name', 'config_name_out': 'config_name_out', 'move_group_out': 'move_group_out', 'robot_name_out': 'robot_name_out', 'action_topic_out': 'action_topic_out', 'joint_values': 'joint_values', 'joint_names': 'joint_names'})
 
 			# x:954 y:59
-			OperatableStateMachine.add('move to station area_2',
+			OperatableStateMachine.add('move to station specific',
 										SrdfStateToMoveitAriac(),
 										transitions={'reached': 'finished', 'planning_failed': 'failed', 'control_failed': 'failed', 'param_error': 'failed'},
 										autonomy={'reached': Autonomy.Off, 'planning_failed': Autonomy.Off, 'control_failed': Autonomy.Off, 'param_error': Autonomy.Off},
@@ -83,7 +83,7 @@ class uniti_2_gantry_motionSM(Behavior):
 			# x:629 y:35
 			OperatableStateMachine.add('lookup station  specific',
 										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='assembly_stations', index_title='as', column_title='as_direct_pos'),
-										transitions={'found': 'move to station area_2', 'not_found': 'failed'},
+										transitions={'found': 'move to station specific', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
 										remapping={'index_value': 'station_id', 'column_value': 'station_specific'})
 

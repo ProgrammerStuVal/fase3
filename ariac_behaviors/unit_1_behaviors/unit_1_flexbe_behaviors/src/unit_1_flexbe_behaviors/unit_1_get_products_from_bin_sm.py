@@ -129,7 +129,7 @@ class unit_1_get_products_from_binSM(Behavior):
 										remapping={'index_value': 'bin', 'column_value': 'camera_topic'})
 
 			# x:1188 y:407
-			OperatableStateMachine.add('lookup camera topic_2',
+			OperatableStateMachine.add('lookup part_height',
 										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='part_height_table', index_title='part_type', column_title='part_height'),
 										transitions={'found': 'Gripper_correcting', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
@@ -159,7 +159,7 @@ class unit_1_get_products_from_binSM(Behavior):
 			# x:1211 y:313
 			OperatableStateMachine.add('what part',
 										MessageState(),
-										transitions={'continue': 'lookup camera topic_2'},
+										transitions={'continue': 'lookup part_height'},
 										autonomy={'continue': Autonomy.Off},
 										remapping={'message': 'kitting_part'})
 

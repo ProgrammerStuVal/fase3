@@ -86,10 +86,10 @@ class unit1_unit2_integrationSM(Behavior):
 										transitions={'continue': 'get order'},
 										autonomy={'continue': Autonomy.Off})
 
-			# x:248 y:517
+			# x:104 y:610
 			OperatableStateMachine.add('assembly ready_2',
 										NotifyAssemblyReadyState(),
-										transitions={'continue': 'last kitting shipment if_2', 'fail': 'failed'},
+										transitions={'continue': 'last assembly   shipment if_3', 'fail': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'fail': Autonomy.Off},
 										remapping={'as_id': 'station_id_assembly', 'shipment_type': 'shipment_type_assembly', 'success': 'success', 'inspection_result': 'inspection_result'})
 
@@ -99,6 +99,13 @@ class unit1_unit2_integrationSM(Behavior):
 										transitions={'continue': 'finished'},
 										autonomy={'continue': Autonomy.Off})
 
+			# x:1266 y:524
+			OperatableStateMachine.add('get assembly parts',
+										GetPartFromProductsState(),
+										transitions={'continue': 'Unit_2_pick', 'invalid_index': 'failed'},
+										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
+										remapping={'products': 'assembly_products', 'index': 'current_product', 'type': 'type', 'pose': 'offset'})
+
 			# x:623 y:42
 			OperatableStateMachine.add('get assembly shipment',
 										GetAssemblyShipmentFromOrderState(),
@@ -106,10 +113,17 @@ class unit1_unit2_integrationSM(Behavior):
 										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'assembly_shipments': 'assembly_shipments', 'assembly_index': 'current_assembly', 'shipment_type': 'shipment_type_assembly', 'products': 'assembly_products', 'shipment_type': 'shipment_type_assembly', 'station_id': 'station_id_assembly', 'number_of_products': 'number_of_products'})
 
+			# x:1246 y:137
+			OperatableStateMachine.add('get kitting parts',
+										GetPartFromProductsState(),
+										transitions={'continue': 'unit_1_get_products_from_bin', 'invalid_index': 'failed'},
+										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
+										remapping={'products': 'kitting_products', 'index': 'current_kitting_product', 'type': 'product_type', 'pose': 'product_pose'})
+
 			# x:1214 y:31
 			OperatableStateMachine.add('get kitting shipment',
 										GetKittingShipmentFromOrderState(),
-										transitions={'continue': 'get parts', 'invalid_index': 'failed'},
+										transitions={'continue': 'get kitting parts', 'invalid_index': 'failed'},
 										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
 										remapping={'kitting_shipments': 'kitting_shipments', 'kitting_index': 'current_kitting', 'shipment_type': 'shipment_type_kitting', 'products': 'kitting_products', 'agv_id': 'agv_id', 'station_id': 'station_id_kitting', 'number_of_products': 'number_of_kitting_products'})
 
@@ -120,20 +134,6 @@ class unit1_unit2_integrationSM(Behavior):
 										autonomy={'order_found': Autonomy.Off, 'no_order_found': Autonomy.Off},
 										remapping={'order_id': 'order_id', 'kitting_shipments': 'kitting_shipments', 'number_of_kitting_shipments': 'number_of_kitting_shipments', 'assembly_shipments': 'assembly_shipments', 'number_of_assembly_shipments': 'number_of_assembly_shipments'})
 
-			# x:1246 y:137
-			OperatableStateMachine.add('get parts',
-										GetPartFromProductsState(),
-										transitions={'continue': 'unit_1_get_products_from_bin', 'invalid_index': 'failed'},
-										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
-										remapping={'products': 'kitting_products', 'index': 'current_kitting_product', 'type': 'product_type', 'pose': 'product_pose'})
-
-			# x:1266 y:524
-			OperatableStateMachine.add('get parts_2',
-										GetPartFromProductsState(),
-										transitions={'continue': 'Unit_2_pick', 'invalid_index': 'failed'},
-										autonomy={'continue': Autonomy.Off, 'invalid_index': Autonomy.Off},
-										remapping={'products': 'assembly_products', 'index': 'current_product', 'type': 'type', 'pose': 'offset'})
-
 			# x:925 y:674
 			OperatableStateMachine.add('increment part iterator',
 										AddNumericState(),
@@ -141,66 +141,73 @@ class unit1_unit2_integrationSM(Behavior):
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'current_product', 'value_b': 'onevalue', 'result': 'current_product'})
 
-			# x:393 y:711
+			# x:382 y:674
 			OperatableStateMachine.add('increment shipment',
 										AddNumericState(),
-										transitions={'done': 'last shipment if'},
+										transitions={'done': 'assembly ready_2'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'current_assembly', 'value_b': 'onevalue', 'result': 'current_assembly'})
 
-			# x:1461 y:478
+			# x:1462 y:500
 			OperatableStateMachine.add('kitting shipment iterator_2',
 										AddNumericState(),
-										transitions={'done': 'last kitting shipment if_2'},
+										transitions={'done': 'last kitting shipment if'},
 										autonomy={'done': Autonomy.Off},
 										remapping={'value_a': 'current_kitting', 'value_b': 'onevalue', 'result': 'current_kitting'})
 
-			# x:1665 y:463
-			OperatableStateMachine.add('last kitting shipment if_2',
+			# x:104 y:437
+			OperatableStateMachine.add('last assembly   shipment if_3',
 										EqualState(),
-										transitions={'true': 'last shipment if_3', 'false': 'get kitting shipment'},
-										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-										remapping={'value_a': 'current_kitting', 'value_b': 'number_of_kitting_shipments'})
-
-			# x:562 y:555
-			OperatableStateMachine.add('last product unit 1',
-										EqualState(),
-										transitions={'true': 'get parts_2', 'false': 'get parts'},
-										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-										remapping={'value_a': 'current_kitting_product', 'value_b': 'number_of_kitting_products'})
-
-			# x:703 y:679
-			OperatableStateMachine.add('last product unit 2',
-										EqualState(),
-										transitions={'true': 'increment shipment', 'false': 'last product unit 1'},
-										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-										remapping={'value_a': 'current_product', 'value_b': 'number_of_products'})
-
-			# x:101 y:695
-			OperatableStateMachine.add('last shipment if',
-										EqualState(),
-										transitions={'true': 'assembly ready_2', 'false': 'reset part iterator'},
+										transitions={'true': 'last kitting shipment if', 'false': 'reset part iterator'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'current_assembly', 'value_b': 'number_of_assembly_shipments'})
 
 			# x:1503 y:311
-			OperatableStateMachine.add('last shipment if_2',
+			OperatableStateMachine.add('last assembly shipment if_2',
 										EqualState(),
-										transitions={'true': 'get parts', 'false': 'get parts_2'},
+										transitions={'true': 'get kitting parts', 'false': 'get assembly parts'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'current_assembly', 'value_b': 'number_of_assembly_shipments'})
 
-			# x:1506 y:722
-			OperatableStateMachine.add('last shipment if_3',
+			# x:1734 y:313
+			OperatableStateMachine.add('last assembly shipment if_4',
 										EqualState(),
-										transitions={'true': 'end', 'false': 'get parts_2'},
+										transitions={'true': 'get kitting shipment', 'false': 'get assembly parts'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'current_assembly', 'value_b': 'number_of_assembly_shipments'})
+
+			# x:562 y:555
+			OperatableStateMachine.add('last kitting shipment',
+										EqualState(),
+										transitions={'true': 'get assembly parts', 'false': 'get kitting shipment'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'current_kitting', 'value_b': 'number_of_kitting_shipments'})
+
+			# x:1665 y:463
+			OperatableStateMachine.add('last kitting shipment if',
+										EqualState(),
+										transitions={'true': 'last shipment assembly if', 'false': 'last assembly shipment if_4'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'current_kitting', 'value_b': 'number_of_kitting_shipments'})
+
+			# x:703 y:679
+			OperatableStateMachine.add('last product unit 2',
+										EqualState(),
+										transitions={'true': 'increment shipment', 'false': 'last kitting shipment'},
+										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+										remapping={'value_a': 'current_product', 'value_b': 'number_of_products'})
+
+			# x:1506 y:722
+			OperatableStateMachine.add('last shipment assembly if',
+										EqualState(),
+										transitions={'true': 'end', 'false': 'get assembly parts'},
 										autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
 										remapping={'value_a': 'current_assembly', 'value_b': 'number_of_assembly_shipments'})
 
 			# x:1248 y:313
 			OperatableStateMachine.add('put product on avg',
 										self.use_behavior(putproductonavgSM, 'put product on avg'),
-										transitions={'finished': 'shipment ready', 'failed': 'failed', 'Next_product': 'last shipment if_2'},
+										transitions={'finished': 'shipment ready', 'failed': 'failed', 'Next_product': 'last assembly shipment if_2'},
 										autonomy={'finished': Autonomy.Inherit, 'failed': Autonomy.Inherit, 'Next_product': Autonomy.Inherit},
 										remapping={'agv_id': 'agv_id', 'current_kitting_product': 'current_kitting_product', 'number_of_kitting_products': 'number_of_kitting_products', 'part_height': 'part_height', 'offset': 'product_pose'})
 

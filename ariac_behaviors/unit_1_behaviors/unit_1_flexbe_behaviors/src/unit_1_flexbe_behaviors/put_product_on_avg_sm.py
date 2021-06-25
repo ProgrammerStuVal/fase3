@@ -82,7 +82,7 @@ class putproductonavgSM(Behavior):
 			# x:30 y:121
 			OperatableStateMachine.add('agv_id',
 										MessageState(),
-										transitions={'continue': 'lookup camera topic'},
+										transitions={'continue': 'lookup agv_frame'},
 										autonomy={'continue': Autonomy.Off},
 										remapping={'message': 'agv_id'})
 
@@ -128,7 +128,7 @@ class putproductonavgSM(Behavior):
 										remapping={'index_value': 'agv_id', 'column_value': 'agv_pregrasp'})
 
 			# x:113 y:59
-			OperatableStateMachine.add('lookup camera topic',
+			OperatableStateMachine.add('lookup agv_frame',
 										LookupFromTableState(parameter_name='ariac_tables_unit1', table_name='agv_table', index_title='agv', column_title='agv_kit'),
 										transitions={'found': 'lookup agv pregrasp', 'not_found': 'failed'},
 										autonomy={'found': Autonomy.Off, 'not_found': Autonomy.Off},
